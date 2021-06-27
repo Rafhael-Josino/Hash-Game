@@ -11,7 +11,6 @@ app.use(express.urlencoded({extended: true}));
 const maxPlayers = 10;
 let numberOfPlayers = 0;
 
-// For now, the first player will always be "x"
 const newGame = "_________";
 
 app.post('/restart', (req, res) => {
@@ -86,10 +85,10 @@ app.post('/mark', (req, res) => {
 				data = data.slice(0, pos) + data[9] + data.slice(pos + 1, 9);
 				console.log("pre-data", data);
 				data = data + newSymbol;
-				// Must change the method of warn the client to use status
 				fs.writeFile(namePath, data, err => {
 					if (err) {
 						console.log("Write file error:", err);
+						// Include the status in the response of the server, not only the text sent
 						res.send("e");
 					}
 					else {
