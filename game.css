@@ -1,0 +1,47 @@
+/* CSS for the Hash Game */
+
+#menu {
+    margin: auto;
+    padding: auto;
+    text-align: center;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 4%;
+}
+
+#game {
+    text-align: center;
+}
+
+#turn {
+    font-size: 200%;
+}
+
+#table {
+    font-size: 900%;
+    margin: auto;
+    padding: auto;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 4%;
+    border-style: solid;
+    border-color: black;
+}
+
+.empty:hover {
+    color: blue;
+    opacity: 0.5;
+}
+
+.getBold:hover {
+    font-weight: bold;
+}
+
+.required {
+    font-weight: bold;
+    font-size: 200%
+}
+
+.invisible {
+    opacity: 0;
+}

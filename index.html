@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+		<title></title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" href="game.css">
+    </head>
+    <body>
+        <div id="menu">
+            <p class="getBold"><label for="players">Select player:</label>
+				<select name="players" id="players">
+					<option id="default" value="default">-</option>
+				</select>
+			</p>
+            or<br>
+            <p>
+				<button id="create" class="getBold">Create new player</button>
+			</p>
+        </div>
+        <div id="game" class="invisible">
+			<div id="buttons">
+	            <button id="restart" class="getBold">Restart</button>
+    	        <button id="delete" class="getBold">Delete</button>
+			</div>
+            <p>
+				Player: <span id="player"></span><br>
+				Turn: <span id="turn"></span><br>
+			</p>
+            <table id="table">
+                <tr>
+                    <td id="0"></td>
+                    <td id="1"></td>
+                    <td id="2"></td>
+                </tr>
+                <tr>
+                    <td id="3"></td>
+                    <td id="4"></td>
+                    <td id="5"></td>
+                </tr>
+                <tr>
+                    <td id="6"></td>
+                    <td id="7"></td>
+                    <td id="8"></td>
+                </tr>
+            </table>
+        <br>
+        </div>
+        <script src="./game.js"></script>
+    </body>
+</html>
