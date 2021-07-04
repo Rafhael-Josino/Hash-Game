@@ -1,3 +1,3 @@
 ### Hash Game
 
-- A simple hash game to practive front and back end development
+- A simple hash game to practice front and back end development, still in progress
