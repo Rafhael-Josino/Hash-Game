@@ -204,11 +204,11 @@ function getPlayers() {
 // After created, automatically select this player
 function createPlayer() {
     createButton.removeEventListener("click", createPlayer);
-    createButton.innerHTML = "Confirm player/symbol (put in blank to cancel)";
     createButton.addEventListener("click", confirmNewPlayer);
 
     let newPlayerField = document.createElement("input");
 	newPlayerField.focus(); // Not working
+    newPlayerField.placeholder = "Blank to cancel operation"
     menu.appendChild(newPlayerField);
     menu.appendChild(newPlayerSymbol);
     
@@ -254,7 +254,7 @@ function createPlayer() {
 
     function cancelNewPlayer() {
         createButton.removeEventListener("click", confirmNewPlayer);
-        createButton.innerHTML = "Create new player";
+        // createButton.innerHTML = "Create new player";
         createButton.addEventListener("click", createPlayer);
         menu.removeChild(newPlayerField);
         menu.removeChild(newPlayerSymbol);
