@@ -10,3 +10,4 @@
 - Insert a field of opponent and the option of create a new player if an opponent is not yet a saved player
 - Insert favicon
 - Insert meta SEO: charset, viewport, author, description, robots...
+- Use forms to receive players's input
