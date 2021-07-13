@@ -204,11 +204,13 @@ function getPlayers() {
 // After created, automatically select this player
 function createPlayer() {
     createButton.removeEventListener("click", createPlayer);
-    createButton.innerHTML = "Confirm player/symbol (put in blank to cancel)";
+    createButton.innerHTML = "Confirm new player";
     createButton.addEventListener("click", confirmNewPlayer);
 
     let newPlayerField = document.createElement("input");
 	newPlayerField.focus(); // Not working
+    newPlayerField.type = "text";
+    newPlayerField.placeholder = "Blank to cancel operation";
     menu.appendChild(newPlayerField);
     menu.appendChild(newPlayerSymbol);
     
@@ -234,16 +236,21 @@ function createPlayer() {
                     newPlayer.setAttribute("value", player);
                     newPlayer.setAttribute("id", player);
                     select.appendChild(newPlayer);
+                    // After adding the new player, his/her game is loaded
                     select.value = player;
                     loadGame();
+                    cancelNewPlayer();
                 }
                 else if (resp.status == 200) {
-                    console.log(match[0], "already present");
+                    console.log(match[0], "Player already present");
+                    newPlayerField.placeholder = "Player already present";
+                    newPlayerField.value = "";
                 }
                 else if (resp.status == 403) {
                     console.log("Number maximum of players reached");
+                    cancelNewPlayer();
                 }
-                cancelNewPlayer();
+                //cancelNewPlayer();
             })
         }
         else {
