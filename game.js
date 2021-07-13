@@ -9,9 +9,12 @@
  * The players's data is handled by the server and has the following formatting in .txt files:
  * 		nine first chars: game's table ["x", "o", "_"]
  *		10º char: game's turn ["x", "o"]
- *		11º char: player's symbol ["x", "o"] exclusive
+ *		11º char: host's symbol ["x", "o"] exclusive
+ *		12º char: guest's symbol ["x", "o"] exclusive
  *
- * The 11º char is still to be implemented and only to the mode against machine
+ * The 11º and 12º chars are still to be implemented
+ * The host will be the seletected player and the guest can be another player or the machine.
+ * This way of save data will be changed to .JSON files and (different backends) a Data Bank yet to be choosen.
  */
 
 // ################################# DOM elements #######################################
@@ -19,14 +22,14 @@ let restartButton = document.getElementById("restart");
 let deleteButton = document.getElementById("delete");
 let createButton = document.getElementById("create");
 let turn = document.getElementById("turn");
-let playerSymbol = document.getElementById("player");
+let host = document.getElementById("host");
 let select = document.querySelector("select");
 let menu = document.getElementById("menu");
 let game = document.getElementById("game");
 let buttons = document.getElementById("buttons");
 let title = document.querySelector("title");
 
-// Select element with options X and O to temporary use in Reset and newPlayer functions
+// Select element with options X and O to temporary be used in the Reset and newPlayer functions
 let newPlayerSymbol = document.createElement("select");
 let xSymbol = document.createElement("option");
 xSymbol.setAttribute("value", 'x');
@@ -37,16 +40,13 @@ oSymbol.innerHTML = "o";
 newPlayerSymbol.appendChild(xSymbol);
 newPlayerSymbol.appendChild(oSymbol);
 
-
-
-// ################################## Other bindings ####################################
-let symbol, cell, match, player;
+// ################################## Other global bindings ####################################
+let symbol, cell, match, player, playerSymbol;
 let playerName = new RegExp('\\w+.txt', 'g');
 let newPlayer;
 
 // To be check if is necessary
 select.value = "default";
-
 
 
 // #################################### Functions #######################################
@@ -81,7 +81,10 @@ function loadGame() {
                     cell.setAttribute("class", "full");
             }
             symbol = text[9];
+            //playerSymbol = text[10];
             turn.textContent = symbol;
+            //host.textContent = player.slice(0,-4) + " - " + playerSymbol;
+            host.textContent = player.slice(0,-4);
 			title.innerHTML = symbol.toUpperCase() + " Hash Game";
             console.log("Game loaded - this turn:", symbol);
         });
@@ -250,7 +253,6 @@ function createPlayer() {
                     console.log("Number maximum of players reached");
                     cancelNewPlayer();
                 }
-                //cancelNewPlayer();
             })
         }
         else {
