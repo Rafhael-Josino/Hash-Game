@@ -4,8 +4,7 @@
 
 ## Next steps
 
-1. Back end must save the host's symbol. As it is now, only the turn's symbol is saved.
-2. Front end must show the symbols of each participant in the game. 
+- Menu must display the correct symbols after the restart function
 
 ## TO DO
 

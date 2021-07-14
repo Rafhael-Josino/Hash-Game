@@ -13,9 +13,12 @@ let numberOfPlayers = 0;
 
 const newGame = "_________";
 
+// The restart function only can be used in games against the machine.
 app.post('/restart', (req, res) => {
 	let playerSymbol = req.body.symbol;
-	fs.writeFile(path.join(__dirname, "players", req.body.name), newGame+playerSymbol, err => {
+	// This way, the host is always the first player. Check how this can be changed
+	// The last symbol indicates the host's symbol
+	fs.writeFile(path.join(__dirname, "players", req.body.name), newGame+playerSymbol+playerSymbol, err => {
 		if (err) console.log("Restart error:", err);
 		else {
 			console.log("Game restarted");
@@ -24,8 +27,6 @@ app.post('/restart', (req, res) => {
 	});
 });
 
-// Include the status in the response of the server, not only the text sent
-// Verify this interaction with game.js
 app.post('/create', (req, res) => {
 	let fileName = req.body.name + '.txt';
 	let playerSymbol = req.body.symbol;
@@ -41,7 +42,9 @@ app.post('/create', (req, res) => {
 				res.status(200).send();
 			}
 			else {
-				fs.writeFile(path.join(__dirname, "players", fileName), newGame+playerSymbol, err => {
+				// This way, the host is always the first player. Check how this can be changed
+				// The last symbol indicates the host's symbol
+				fs.writeFile(path.join(__dirname, "players", fileName), newGame+playerSymbol+playerSymbol, err => {
 					if (err) console.log("Create error:", err);
 					else {
 						numberOfPlayers++;
@@ -82,13 +85,15 @@ app.post('/mark', (req, res) => {
 				if (data[9] === "x") newSymbol = "o";
 				else if (data[9] === "o") newSymbol = "x";
 				else throw "file currupted";
-				data = data.slice(0, pos) + data[9] + data.slice(pos + 1, 9);
-				console.log("pre-data", data);
-				data = data + newSymbol;
+				// Here it only consists of the table
+				let table = data.slice(0, pos) + data[9] + data.slice(pos + 1, 9);
+				console.log("Table:", table);
+				data = table + newSymbol + data[10];
 				fs.writeFile(namePath, data, err => {
 					if (err) {
 						console.log("Write file error:", err);
 						// Include the status in the response of the server, not only the text sent
+						// Test res.status(500?).send("e") or verify if needs the send function at all
 						res.send("e");
 					}
 					else {

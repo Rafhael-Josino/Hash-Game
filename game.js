@@ -23,6 +23,7 @@ let deleteButton = document.getElementById("delete");
 let createButton = document.getElementById("create");
 let turn = document.getElementById("turn");
 let host = document.getElementById("host");
+let guest = document.getElementById("guest");
 let select = document.querySelector("select");
 let menu = document.getElementById("menu");
 let game = document.getElementById("game");
@@ -41,7 +42,7 @@ newPlayerSymbol.appendChild(xSymbol);
 newPlayerSymbol.appendChild(oSymbol);
 
 // ################################## Other global bindings ####################################
-let symbol, cell, match, player, playerSymbol;
+let symbol, cell, match, player;
 let playerName = new RegExp('\\w+.txt', 'g');
 let newPlayer;
 
@@ -81,10 +82,13 @@ function loadGame() {
                     cell.setAttribute("class", "full");
             }
             symbol = text[9];
-            //playerSymbol = text[10];
+            let hostSymbol = text[10].toUpperCase();
+            let guestSymbol;
+            if (hostSymbol === "X") guestSymbol = "O";
+            else guestSymbol = "X";
             turn.textContent = symbol;
-            //host.textContent = player.slice(0,-4) + " - " + playerSymbol;
-            host.textContent = player.slice(0,-4);
+            host.textContent = player.slice(0,-4) + " - " + hostSymbol;
+            guest.textContent = "Not implemented - " + guestSymbol;
 			title.innerHTML = symbol.toUpperCase() + " Hash Game";
             console.log("Game loaded - this turn:", symbol);
         });
