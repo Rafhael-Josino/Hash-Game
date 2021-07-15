@@ -42,7 +42,8 @@ newPlayerSymbol.appendChild(xSymbol);
 newPlayerSymbol.appendChild(oSymbol);
 
 // ################################## Other global bindings ####################################
-let symbol, cell, match, player;
+let symbol; // Next symbol to be draw on the table 
+let cell, match, player;
 let playerName = new RegExp('\\w+.txt', 'g');
 let newPlayer;
 
@@ -81,16 +82,16 @@ function loadGame() {
                 else
                     cell.setAttribute("class", "full");
             }
-            symbol = text[9];
             let hostSymbol = text[10].toUpperCase();
             let guestSymbol;
             if (hostSymbol === "X") guestSymbol = "O";
             else guestSymbol = "X";
+            symbol = text[9];
             turn.textContent = symbol;
             host.textContent = player.slice(0,-4) + " - " + hostSymbol;
             guest.textContent = "Not implemented - " + guestSymbol;
-			title.innerHTML = symbol.toUpperCase() + " Hash Game";
-            console.log("Game loaded - this turn:", symbol);
+			title.innerHTML = hostSymbol.toUpperCase() + " Hash Game";
+            console.log("Game loaded - this turn:", hostSymbol);
         });
 }
 
@@ -137,14 +138,21 @@ function marked(event) {
 // Restart the game of the current player
 // This change is saved in the player's file by the server
 function restart() {
+    // Disable the events outside the restart context
+    createButton.disabled = true;
+    select.disabled = true;
+
+    // Button Restart -> Confirm restart
 	restartButton.removeEventListener("click", restart);
 	restartButton.innerHTML = "Confirm";
 	restartButton.addEventListener("click", confirmRestart);
+
+    // Button Delete -> Cancel restart
 	deleteButton.removeEventListener("click", deletePlayer);
 	deleteButton.innerHTML = "Cancel";
 	deleteButton.addEventListener("click", cancelRestart);
 
-	// Insert option to chose symbol
+    // Adds select element defined previously
 	buttons.appendChild(newPlayerSymbol);
 
 	function confirmRestart() {
@@ -156,6 +164,7 @@ function restart() {
 				symbol: newPlayerSymbol.value
 			})
 		}).then(resp => {
+            // Cleans table
 			for (let i = 0; i < 9; i++) {
 				cell = document.getElementById(String(i));
 				cell.textContent = '_';
@@ -164,15 +173,25 @@ function restart() {
 				cell.addEventListener("mouseleave", cleanPreview);
 				cell.setAttribute("class", "empty");
 			}
-			symbol = newPlayerSymbol.value;
-			turn.textContent = symbol;
-			title.innerHTML = symbol.toUpperCase() + " Hash Game";
-			console.log("Game restarted");
+            symbol = newPlayerSymbol.value;
+            let hostSymbol = symbol.toUpperCase(); // For now, the host is always the first player
+            let guestSymbol;
+            if (hostSymbol === "X") guestSymbol = "O";
+            else guestSymbol = "X";
+            turn.textContent = symbol;
+            host.textContent = player.slice(0,-4) + " - " + hostSymbol;
+            guest.textContent = "Not implemented - " + guestSymbol;
+			title.innerHTML = hostSymbol.toUpperCase() + " Hash Game";
+            console.log("Game restarted");
 			cancelRestart();
 		});
 	}
 
 	function cancelRestart() {
+        // Returns the events
+        createButton.disabled = false;
+        select.disabled = false;
+
 		restartButton.removeEventListener("click", confirmRestart);
 		restartButton.innerHTML = "Restart";
 		restartButton.addEventListener("click", restart);
