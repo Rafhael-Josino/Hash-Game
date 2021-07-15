@@ -2,14 +2,12 @@
 
 - A simple hash game to practice front and back end development, still in progress
 
-## Next steps
-
-- Menu must display the correct symbols after the restart function
-
 ## TO DO
 
+- Separete the act of create a player from start a new game (a existing game is loaded together with its host)
+- Make the first player be random
 - Change data from TXT to JSON files
-- Use a data bank. This solution can be tested in another branch
+- Test a data bank. This solution can be tested in another branch
 - Add a password to the players
 - Insert a field of opponent and the option of create a new player if an opponent is not yet a saved player
 - Insert favicon
