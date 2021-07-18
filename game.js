@@ -44,7 +44,8 @@ newPlayerSymbol.appendChild(oSymbol);
 // ################################## Other global bindings ####################################
 let symbol; // Next symbol to be draw on the table 
 let cell, match, player;
-let playerName = new RegExp('\\w+.txt', 'g');
+//let playerName = new RegExp('\\w+.txt', 'g');
+let playerName = new RegExp('\\w+.json', 'g');
 let newPlayer;
 
 // To be check if is necessary
@@ -64,13 +65,14 @@ function loadGame() {
         game.setAttribute("class", "visible");
     }
 	// Fetches the selected player's information
-    fetch('/players/' + player).then(resp => resp.text())
+    //fetch('/players/' + player).then(resp => resp.text())
+    fetch('/players/' + player).then(resp => resp.json())
         .then(text => {
-            console.log("teste do [text] em loadGame:", text);
+            console.log("File loaded:", text);
             for (let i = 0; i < 9; i++) {
                 let cell = document.getElementById(String(i));
-                cell.textContent = text[i];
-                if (text[i] === '_') {
+                cell.textContent = text.table[i];
+                if (text.table[i] === '_') {
 					// !!! Must confirm if the event handlers can be add always,
 					// once their callback function check the state (class) of the space
 					// That being the case, they can very well be added at the page's loading
@@ -82,13 +84,15 @@ function loadGame() {
                 else
                     cell.setAttribute("class", "full");
             }
-            let hostSymbol = text[10].toUpperCase();
+            //let hostSymbol = text[10].toUpperCase();
+            let hostSymbol = text.symbol;
             let guestSymbol;
-            if (hostSymbol === "X") guestSymbol = "O";
-            else guestSymbol = "X";
-            symbol = text[9];
+            if (hostSymbol === "x") guestSymbol = "O";
+            else if (hostSymbol === "o") guestSymbol = "X";
+            else throw new Error("Host symbol not recognized");
+            symbol = text.turn;
             turn.textContent = symbol;
-            host.textContent = player.slice(0,-4) + " - " + hostSymbol;
+            host.textContent = player.slice(0,-5) + " - " + hostSymbol.toUpperCase();
             guest.textContent = "Not implemented - " + guestSymbol;
 			title.innerHTML = hostSymbol.toUpperCase() + " Hash Game";
             console.log("Game loaded - this turn:", hostSymbol);
@@ -119,6 +123,7 @@ function marked(event) {
 		        })
 		    }).then(resp => resp.text()).then(text => {
 		            try {
+                        // Change this to check the message status instead
 		                if (text !== 'e') {
                 		    console.log("next turn -", text);
                 		    symbol = text;
@@ -211,8 +216,8 @@ function getPlayers() {
             if(match) {
                 match.forEach(name => {
                     // name -> .txt
-                    // onlyName -> without extension part
-                    let onlyName = name.slice(0,-4); 
+                    // onlyName -> without extension part (-4 for .txt and -5 for .json)
+                    let onlyName = name.slice(0,-5); 
                     let player = document.createElement("option");
                     player.innerHTML = onlyName;
                     player.setAttribute("value", name); 
@@ -229,6 +234,8 @@ function getPlayers() {
 // Sends to the server a requisition to create a new player, with the name and symbol of choice
 // After created, automatically select this player
 function createPlayer() {
+    // Insert the canceling of other events likewise in the restart function
+
     createButton.removeEventListener("click", createPlayer);
     createButton.innerHTML = "Confirm new player";
     createButton.addEventListener("click", confirmNewPlayer);
@@ -256,7 +263,7 @@ function createPlayer() {
                 console.log("Status", resp.status);
                 if (resp.status == 201) {
                     console.log(match[0], "created");
-                    player = match[0] + ".txt";
+                    player = match[0] + ".json";
                     let newPlayer = document.createElement("option");
                     newPlayer.innerHTML = match[0];
                     newPlayer.setAttribute("value", player);
@@ -285,6 +292,7 @@ function createPlayer() {
     }
 
     function cancelNewPlayer() {
+        // Insert the back of other events to operation likewise in the restart function
         createButton.removeEventListener("click", confirmNewPlayer);
         createButton.innerHTML = "Create new player";
         createButton.addEventListener("click", createPlayer);

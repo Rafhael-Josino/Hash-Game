@@ -4,11 +4,12 @@
 
 ## TO DO
 
+- Fix restart function to work with JSON files
 - Separete the act of create a player from start a new game (a existing game is loaded together with its host)
-- Make the first player be random
-- Change data from TXT to JSON files
+- Make the first player of a match random
 - Test a data bank. This solution can be tested in another branch
 - Add a password to the players
+- Resolve comments notes present in the codes
 - Insert a field of opponent and the option of create a new player if an opponent is not yet a saved player
 - Insert favicon
 - Insert meta SEO: charset, viewport, author, description, robots...
