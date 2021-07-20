@@ -11,20 +11,28 @@ app.use(express.urlencoded({extended: true}));
 const maxPlayers = 10;
 let numberOfPlayers = 0;
 
-const newGame = "_________";
-
-// The restart function only can be used in games against the machine.
+// The restart function can only be used in games against the machine.
 app.post('/restart', (req, res) => {
-	let playerSymbol = req.body.symbol;
-	// This way, the host is always the first player. Check how this can be changed
-	// The last symbol indicates the host's symbol
-	fs.writeFile(path.join(__dirname, "players", req.body.name), newGame+playerSymbol+playerSymbol, err => {
-		if (err) console.log("Restart error:", err);
+	console.log("Received data (file name, host symbol):");
+	console.log(req.body);
+	fs.readFile(path.join(__dirname, "players", req.body.fileName), "utf-8", (err, data) => {
+		if (err) console.log("Error reading file", err);
 		else {
-			console.log("Game restarted");
-			res.send();
+			const playerObj = JSON.parse(data);
+			playerObj.table = "_________";
+			// The host is this way always the first player. This must be changed to be random
+			playerObj.symbol = req.body.symbol;
+			playerObj.turn = req.body.symbol;
+			const playerData = JSON.stringify(playerObj);
+			fs.writeFile(path.join(__dirname, "players", req.body.fileName), playerData, err => {
+				if (err) console.log("Create error:", err);
+				else {
+					console.log(req.body.fileName, "restarted");
+					res.status(201).send();
+				}
+			})	
 		}
-	});
+	})
 });
 
 app.post('/create', (req, res) => {
@@ -86,7 +94,7 @@ app.post('/mark', (req, res) => {
 	console.log("POST /mark:", req.body);
 	const pos = parseInt(req.body.pos);
 	const namePath = path.join(__dirname, "players", req.body.name);
-		fs.readFile(namePath, "utf8", (err, data) => {
+	fs.readFile(namePath, "utf8", (err, data) => {
 		if (err) console.log(err);
 		else {
 			try {
@@ -141,24 +149,10 @@ app.get('/players/:player', (req, res) => {
 	fs.readFile(namePath, "utf8", (err, data) => {
 		if (err) console.log(err);
 		else {
-			// Think a way to check the files
-			// try {
-				// if {}
 			console.log("Sending player file:");
 			console.log(typeof data);
 			console.log(data);
 			res.send(data);
-			/*
-				else throw "file corrupted in /load";
-			} catch(error) {
-				console.log(error);
-				console.log("Trying rewrite file, adding this player again");
-				//How to procede from here?
-				//newPlayer(req.params.player, namePath);
-				//res.type('json');
-				res.send(newGame);
-			}
-			*/
 		}
 	});
 })

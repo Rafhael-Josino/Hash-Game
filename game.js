@@ -165,9 +165,10 @@ function restart() {
 			method: "POST",
 			headers: {"Content-Type": "application/json"},
 			body: JSON.stringify({
-				name: player,
+				fileName: player,
 				symbol: newPlayerSymbol.value
 			})
+        // Add error verification
 		}).then(resp => {
             // Cleans table
 			for (let i = 0; i < 9; i++) {
