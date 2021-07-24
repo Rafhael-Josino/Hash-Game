@@ -4,7 +4,6 @@
 
 ## TO DO
 
-- Fix restart function to work with JSON files
 - Separete the act of create a player from start a new game (a existing game is loaded together with its host)
 - Make the first player of a match random
 - Test a data bank. This solution can be tested in another branch

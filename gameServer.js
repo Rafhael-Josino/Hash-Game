@@ -56,13 +56,10 @@ app.post('/create', (req, res) => {
 				const playerFile = {
 					"name": req.body.name,
 					"symbol": req.body.symbol, // Will be deleted when the act of create a player is independent of a game start
-					"turn": req.body.symbol, // For matches hosted by this player
+					"turn": req.body.symbol, // For now, the host is always the first player. This must be changed to be random
 					"table": "_________"
 				}
 				const data = JSON.stringify(playerFile);
-				// This way, the host is always the first player. Check how this can be changed
-				// The last symbol indicates the host's symbol
-				//fs.writeFile(path.join(__dirname, "players", fileName), newGame+playerSymbol+playerSymbol, err => {
 				fs.writeFile(path.join(__dirname, "players", req.body.name + ".json"), data, err => {
 					if (err) console.log("Create error:", err);
 					else {
