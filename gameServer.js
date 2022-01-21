@@ -154,7 +154,7 @@ app.get('/players/:player', (req, res) => {
 	});
 })
 
-app.get('/index.html', (req, res) => {
+app.get('/index', (req, res) => {
 	var options = {
 		root: __dirname,
 		dotfiles: 'deny',

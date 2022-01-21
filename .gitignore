@@ -1,2 +1,4 @@
 players/
-node_modules/
+.yarn/
+.editorconfig
+yarn.lock
