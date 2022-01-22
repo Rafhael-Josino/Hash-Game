@@ -66,7 +66,7 @@ function loadGame() {
     }
 	// Fetches the selected player's information
     //fetch('/players/' + player).then(resp => resp.text())
-    fetch('/players/' + player).then(resp => resp.json())
+    fetch('/player', {headers: {filename: player}}).then(resp => resp.json())
         .then(text => {
             console.log("File loaded:", text);
             for (let i = 0; i < 9; i++) {
@@ -115,11 +115,13 @@ function marked(event) {
 	if (event.target.getAttribute("class") === 'empty') {
 		    event.target.setAttribute("class", "full");
 		    fetch("mark", {
-		        method: "POST",
-		        headers: {"Content-Type": "application/json"},
+		        method: "PUT",
+		        headers: {
+                    "Content-Type": "application/json",
+                    filename: player
+                },
 		        body: JSON.stringify({
 		            pos: event.target.getAttribute("id"),
-		            name: player
 		        })
 		    }).then(resp => resp.text()).then(text => {
 		            try {
@@ -162,10 +164,13 @@ function restart() {
 
 	function confirmRestart() {
 		fetch("restart", {
-			method: "POST",
-			headers: {"Content-Type": "application/json"},
+			method: "PUT",
+			headers: {
+                "Content-Type": "application/json",
+                filename: player
+            },
 			body: JSON.stringify({
-				fileName: player,
+				//fileName: player,
 				symbol: newPlayerSymbol.value
 			})
         // Add error verification
@@ -306,10 +311,10 @@ function createPlayer() {
 function deletePlayer() {
     fetch('delete', {
         method: 'DELETE',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            name: player
-        })
+        headers: {
+            "Content-Type": "application/json",
+            filename: player
+        }
     }).then(resp => resp.text()).then(text => {
         console.log(text);
         console.log(player);
